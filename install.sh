@@ -15,5 +15,5 @@ else
     --name ifconfig \
     -p 85:8080 \
     --restart=always \
-    "$DOCKER_HUB_URL" echoip -p -H X-Forwarded-For
+    "$DOCKER_HUB_URL"
 fi
