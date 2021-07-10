@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
 APPNAME="ifconfig"
+DOCKER_HUB_URL="mpolden/echoip:latest"
 
-mkdir -p "$DATADIR" && chmod -Rf 777 "$DATADIR"
+sudo mkdir -p "$DATADIR"
+sudo chmod -Rf 777 "$DATADIR"
 
 if docker ps -a | grep "$APPNAME" >/dev/null 2>&1; then
-  docker pull mpolden/echoip:latest && docker restart "$APPNAME"
+  sudo docker pull "$DOCKER_HUB_URL"
+  sudo docker restart "$APPNAME"
 else
-  docker run \
+  sudo docker run \
     --detach \
     --name ifconfig \
     -p 85:8080 \
     --restart=always \
-    mpolden/echoip:latest echoip -p -H X-Forwarded-For
+    "$DOCKER_HUB_URL" echoip -p -H X-Forwarded-For
 fi
