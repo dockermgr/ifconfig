@@ -45,6 +45,7 @@ __options "$@"
 APPNAME="ifconfig"
 DOCKER_HUB_URL="mpolden/echoip"
 IFCONFIG_SERVER_PORT="${IFCONFIG_SERVER_PORT:-15050}"
+IFCONFIG_SERVER_HOST="${IFCONFIG_SERVER_HOST:-$(hostname -f 2>/dev/null)}"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 APPDIR="/usr/local/share/CasjaysDev/$SCRIPTS_PREFIX/$APPNAME"
 INSTDIR="/usr/local/share/CasjaysDev/$SCRIPTS_PREFIX/$APPNAME"
