@@ -44,6 +44,7 @@ __options "$@"
 # Begin installer
 APPNAME="ifconfig"
 DOCKER_HUB_URL="mpolden/echoip"
+IFCONFIG_SERVER_PORT="${IFCONFIG_SERVER_PORT:-15050}"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 APPDIR="/usr/local/share/CasjaysDev/$SCRIPTS_PREFIX/$APPNAME"
 INSTDIR="/usr/local/share/CasjaysDev/$SCRIPTS_PREFIX/$APPNAME"
@@ -52,7 +53,7 @@ REPORAW="$REPO/raw/$GIT_DEFAULT_BRANCH"
 APPVERSION="$(__appversion "$REPORAW/version.txt")"
 TIMEZONE="${TZ:-$TIMEZONE}"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-sudo mkdir -p "$DATADIR"/{data}
+sudo mkdir -p "$DATADIR/data"
 sudo chmod -Rf 777 "$DATADIR"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if [ -f "$INSTDIR/docker-compose.yml" ]; then
@@ -74,13 +75,13 @@ else
       --privileged \
       -e TZ=${TIMEZONE:-America/New_York} \
       -v "$DATADIR/data":/data:z \
-      -p 85:8080 \
+      -p "$IFCONFIG_SERVER_PORT":8080 \
       "$DOCKER_HUB_URL" &>/dev/null
   fi
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if docker ps -a | grep -qs "$APPNAME"; then
-  printf_blue "Service is available at: http://$HOSTNAME:85"
+  printf_blue "Service is available at: http://$HOSTNAME:$IFCONFIG_SERVER_PORT"
 else
   false
 fi
