@@ -66,6 +66,7 @@ APPVERSION="$(__appversion "$REPORAW/version.txt")"
 __sudo mkdir -p "$DATADIR/data"
 __sudo mkdir -p "$DATADIR/config"
 __sudo chmod -Rf 777 "$DATADIR"
+[[ -d "$INSTDIR/system" ]] && cp -Rf "$INSTDIR/system/*" "$DATADIR/"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if [ -f "$INSTDIR/docker-compose.yml" ] && cmd_exists docker-compose; then
   printf_blue "Installing containers using docker compose"
@@ -76,20 +77,19 @@ if [ -f "$INSTDIR/docker-compose.yml" ] && cmd_exists docker-compose; then
   fi
 else
   if docker ps -a | grep -qsw "$APPNAME"; then
-    __sudo docker pull "$DOCKER_HUB_URL" &>/dev/null
-    __sudo docker restart "$APPNAME" &>/dev/null
-  else
-    __sudo docker run -d \
-      --name="$APPNAME" \
-      --hostname "$APPNAME" \
-      --restart=unless-stopped \
-      --privileged \
-      -e TZ="$IFCONFIG_SERVER_TIMEZONE" \
-      -v "$DATADIR/data":/data:z \
-      -v "$DATADIR/config":/config:z \
-      -p "$IFCONFIG_SERVER_PORT":8080 \
-      "$DOCKER_HUB_URL" -H X-Forwarded-For &>/dev/null
+    __sudo docker stop "$APPNAME" &>/dev/null
+    __sudo docker rm -f "$APPNAME" &>/dev/null
   fi
+  __sudo docker run -d \
+    --name="$APPNAME" \
+    --hostname "$APPNAME" \
+    --restart=unless-stopped \
+    --privileged \
+    -e TZ="$IFCONFIG_SERVER_TIMEZONE" \
+    -v "$DATADIR/data":/data:z \
+    -v "$DATADIR/config":/config:z \
+    -p "$IFCONFIG_SERVER_PORT":8080 \
+    "$DOCKER_HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb 1>/dev/null
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if docker ps -a | grep -qs "$APPNAME"; then
