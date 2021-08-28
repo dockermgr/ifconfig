@@ -25,7 +25,7 @@ sudo docker run -d \
 -v "$HOME/.local/share/srv/docker/ifconfig/data":/data:z \
 -v "$HOME/.local/share/srv/docker/ifconfig/config":/config:z \
 -p 15406:8080 \
-mpolden/echoip -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb 1>/dev/null
+mpolden/echoip -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /data/html 1>/dev/null
 ```
 
 ## Author  

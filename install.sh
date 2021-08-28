@@ -89,7 +89,7 @@ else
     -v "$DATADIR/data":/data:z \
     -v "$DATADIR/config":/config:z \
     -p "$IFCONFIG_SERVER_PORT":8080 \
-    "$DOCKER_HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb 1>/dev/null
+    "$DOCKER_HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /data/html 1>/dev/null
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if docker ps -a | grep -qs "$APPNAME"; then
