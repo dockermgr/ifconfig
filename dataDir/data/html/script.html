@@ -10,14 +10,14 @@
   let ip = ''
 
   window.onload = (event) => {
-     commandBox = document.getElementById('command');
-     widgetBox = document.getElementById('output');
-     ipCheckBox = document.getElementById('ipCheckBox')
-     portCheckBox = document.getElementById('portCheckBox')
-     portInput = document.getElementById('portInput')
-     reset()
-     setcommdStr()
-     changeInput("ip")
+    commandBox = document.getElementById('command');
+    widgetBox = document.getElementById('output');
+    ipCheckBox = document.getElementById('ipCheckBox')
+    portCheckBox = document.getElementById('portCheckBox')
+    portInput = document.getElementById('portInput')
+    reset()
+    setcommdStr()
+    changeInput("ip")
   }
 
   function reset() {
@@ -36,7 +36,7 @@
     path = input
     portQuery = ""
     portInput.classList.add("hidden");
-    switch(path) {
+    switch (path) {
       case "json":
         output.innerText = jsonObj
         break
@@ -62,7 +62,7 @@
     // set button selected
     if (button) {
       allButtons = document.querySelectorAll(('button.selected'));
-      allButtons.forEach((btn) => {btn.classList.remove("selected")})
+      allButtons.forEach((btn) => { btn.classList.remove("selected") })
 
       button.classList.add("selected");
     }
