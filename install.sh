@@ -147,7 +147,7 @@ else
     -v "$DATADIR/data":/data \
     -v "$DATADIR/config":/config \
     -p $SERVER_IP:$SERVER_PORT:$SERVER_PORT_INT \
-    "$HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /config/web 1>/dev/null
+    "$HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /config/web &>/dev/null
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install nginx proxy
