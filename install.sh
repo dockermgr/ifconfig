@@ -65,7 +65,7 @@ REPORAW="$REPO/raw/$REPO_BRANCH"
 APPVERSION="$(__appversion "$REPORAW/version.txt")"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup plugins
-HUB_URL="mpolden/echoip"
+HUB_URL="casjaysdev/ifconfig"
 NGINX_HTTP="${NGINX_HTTP:-80}"
 NGINX_HTTPS="${NGINX_HTTPS:-443}"
 SERVER_IP="${CURRIP4:-127.0.0.1}"
