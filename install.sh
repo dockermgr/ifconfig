@@ -66,7 +66,10 @@ APPVERSION="$(__appversion "$REPORAW/version.txt")"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup plugins
 HUB_URL="mpolden/echoip"
+NGINX_HTTP="${NGINX_HTTP:-80}"
+NGINX_HTTPS="${NGINX_HTTPS:-443}"
 SERVER_IP="${CURRIP4:-127.0.0.1}"
+SERVER_LISTEN="${SERVER_LISTEN:-$SERVER_IP}"
 SERVER_HOST="$(hostname -f 2>/dev/null || echo localhost)"
 SERVER_PORT="${SERVER_PORT:-15406}"
 SERVER_PORT_INT="${SERVER_PORT_INT:-8080}"
@@ -102,8 +105,9 @@ dockermgr_run_init
 ensure_dirs
 ensure_perms
 __sudo mkdir -p "$DATADIR/data"
-#__sudo mkdir -p "$DATADIR/config"
+__sudo mkdir -p "$DATADIR/config"
 __sudo chmod -Rf 777 "$APPDIR"
+rm -Rf "$DATADIR/dataDir"/*/.gitkeep &>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Clone/update the repo
 if am_i_online; then
@@ -146,7 +150,7 @@ else
     -e TZ="$SERVER_TIMEZONE" \
     -v "$DATADIR/data":/data \
     -v "$DATADIR/config":/config \
-    -p $SERVER_IP:$SERVER_PORT:$SERVER_PORT_INT \
+    -p $SERVER_LISTEN:$SERVER_PORT:$SERVER_PORT_INT \
     "$HUB_URL" -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /config/web &>/dev/null
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -155,9 +159,11 @@ if [[ ! -f "/etc/nginx/vhosts.d/$APPNAME.conf" ]] && [[ -f "$APPDIR/nginx/proxy.
   if __port_not_in_use "$SERVER_PORT"; then
     printf_green "Copying the nginx configuration"
     __sudo_root cp -Rf "$APPDIR/nginx/proxy.conf" "/etc/nginx/vhosts.d/$APPNAME.conf"
-    sed -i "s|REPLACE_APPNAME|$APPNAME|g" "/etc/nginx/vhosts.d/$APPNAME.conf"
-    sed -i "s|REPLACE_SERVER_HOST|$SERVER_HOST|g" "/etc/nginx/vhosts.d/$APPNAME.conf"
-    sed -i "s|REPLACE_SERVER_PORT|$SERVER_PORT|g" "/etc/nginx/vhosts.d/$APPNAME.conf"
+    sed -i "s|REPLACE_APPNAME|$APPNAME|g" "/etc/nginx/vhosts.d/$APPNAME.conf" &>/dev/null
+    sed -i "s|REPLACE_NGINX_HTTP|$NGINX_HTTP|g" "/etc/nginx/vhosts.d/$APPNAME.conf" &>/dev/null
+    sed -i "s|REPLACE_NGINX_HTTPS|$NGINX_HTTPS|g" "/etc/nginx/vhosts.d/$APPNAME.conf" &>/dev/null
+    sed -i "s|REPLACE_SERVER_PORT|$SERVER_PORT|g" "/etc/nginx/vhosts.d/$APPNAME.conf" &>/dev/null
+    sed -i "s|REPLACE_SERVER_LISTEN|$SERVER_LISTEN|g" "/etc/nginx/vhosts.d/$APPNAME.conf" &>/dev/null
     __sudo_root systemctl reload nginx &>/dev/null
   fi
 fi
@@ -178,7 +184,6 @@ if docker ps -a | grep -qs "$APPNAME"; then
   printf_cyan "Installed to $INSTDIR"
   printf_blue "Service is running on: $SERVER_IP:$SERVER_PORT"
   printf_blue "and should be available at: $SERVER_HOST:$SERVER_PORT"
-  rm -Rf "$DATADIR/dataDir"/*/.gitkeep &>/dev/null
 else
   printf_error "Something seems to have gone wrong with the install"
 fi
