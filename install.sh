@@ -107,7 +107,6 @@ ensure_perms
 mkdir -p "$DATADIR/data"
 mkdir -p "$DATADIR/config"
 chmod -Rf 777 "$APPDIR"
-rm -Rf "$DATADIR/config/web" &>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Clone/update the repo
 if am_i_online; then
@@ -129,6 +128,7 @@ if [[ -d "$INSTDIR/dataDir" ]] && [[ ! -f "$DATADIR/.installed" ]]; then
   touch "$DATADIR/.installed"
   find "$DATADIR" -name ".gitkeep" -type f -exec rm -rf {} \; &>/dev/null
 fi
+cp -Rf "$INSTDIR/dataDir/config/web/." "$DATADIR/config/web" &>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Main progam
 if [ -f "$INSTDIR/docker-compose.yml" ] && cmd_exists docker-compose; then
