@@ -65,7 +65,7 @@ REPORAW="$REPO/raw/$REPO_BRANCH"
 APPVERSION="$(__appversion "$REPORAW/version.txt")"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup plugins
-HUB_URL="casjaysdev/ifconfig"
+HUB_URL="casjaysdevdocker/ifconfig"
 NGINX_HTTP="${NGINX_HTTP:-80}"
 NGINX_HTTPS="${NGINX_HTTPS:-443}"
 SERVER_IP="${CURRIP4:-127.0.0.1}"
@@ -128,7 +128,6 @@ if [[ -d "$INSTDIR/dataDir" ]] && [[ ! -f "$DATADIR/.installed" ]]; then
   touch "$DATADIR/.installed"
   find "$DATADIR" -name ".gitkeep" -type f -exec rm -rf {} \; &>/dev/null
 fi
-cp -Rf "$INSTDIR/dataDir/config/web/." "$DATADIR/config/web" &>/dev/null
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Main progam
 if [ -f "$INSTDIR/docker-compose.yml" ] && cmd_exists docker-compose; then
@@ -152,7 +151,7 @@ else
     -v "$DATADIR/data":/data \
     -v "$DATADIR/config":/config \
     -p $SERVER_LISTEN:$SERVER_PORT:$SERVER_PORT_INT \
-    "$HUB_URL" -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /config/web -H x-forwarded-for -r -s -p &>/dev/null
+    "$HUB_URL" &>/dev/null
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Install nginx proxy
