@@ -1,33 +1,66 @@
-# Welcome to dockermgr ipconfig installer 👋
+## 👋 Welcome to ifconfig 🚀  
 
-## To install
-
-```shell
-dockermgr install ipconfig
-```  
-
-## Manual install
-
-Service is available at: <http://localhost:15406>
+Description  
+  
+  
+## Requires scripts to be installed  
 
 ```shell
-git clone https://github.com/dockermgr/ifconfig "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig"
+ sudo bash -c "$(curl -q -LSsf "https://github.com/systemmgr/installer/raw/main/install.sh")"
+ systemmgr --config && systemmgr install scripts  
+```
 
-mkdir -p "$HOME/.local/share/srv/docker/ifconfig/"
-cp -Rf "$HOME/.local/share/srv/docker/ifconfig/system/*" "$HOME/.local/share/srv/docker/ifconfig/"
+## Automatic install/update  
 
-sudo docker run -d \
---name="ifconfig" \
---hostname "checkip" \
---restart=unless-stopped \
+```shell
+dockermgr update ifconfig
+```
+
+OR
+
+```shell
+mkdir -p "$HOME/.local/share/srv/docker/ifconfig/rootfs"
+git clone "https://github.com/dockermgr/ifconfig" "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig/rootfs/." "$HOME/.local/share/srv/docker/ifconfig/rootfs/"
+```
+
+## via command line  
+
+```shell
+docker pull casjaysdevdocker/ifconfig:latest && \
+docker run -d \
+--restart always \
 --privileged \
--e TZ="${TZ:-${TIMEZONE:-America/New_York}}" \
--v "$HOME/.local/share/srv/docker/ifconfig/data":/data:z \
--v "$HOME/.local/share/srv/docker/ifconfig/config":/config:z \
--p 15406:8080 \
-mpolden/echoip -H X-Forwarded-For -a /data/GeoLite2-ASN.mmdb -c /data/GeoLite2-City.mmdb -f /data/GeoLite2-Country.mmdb -t /data/html &>/dev/null
+--name casjaysdevdocker-ifconfig \
+--hostname casjaysdev-ifconfig \
+-e TZ=${TIMEZONE:-America/New_York} \
+-v $HOME/.local/share/srv/docker/ifconfig/rootfs/data:/data:z \
+-v $HOME/.local/share/srv/docker/ifconfig/rootfs/config:/config:z \
+-p 80:80 \
+casjaysdevdocker/ifconfig:latest
+```
+
+## via docker-compose  
+
+```yaml
+version: "2"
+services:
+  ifconfig:
+    image: casjaysdevdocker/ifconfig
+    container_name: ifconfig
+    environment:
+      - TZ=America/New_York
+      - HOSTNAME=casjaysdev-ifconfig
+    volumes:
+      - $HOME/.local/share/srv/docker/ifconfig/rootfs/data:/data:z
+      - $HOME/.local/share/srv/docker/ifconfig/rootfs/config:/config:z
+    ports:
+      - 80:80
+    restart: always
 ```
 
 ## Author  
 
-👤 **Jason Hempstead**  
+📽 dockermgr: [Github](https://github.com/dockermgr) 📽  
+🤖 casjay: [Github](https://github.com/casjay) [Docker](https://hub.docker.com/r/casjay) 🤖  
+⛵ CasjaysDevDocker: [Github](https://github.com/casjaysdevdocker) [Docker](https://hub.docker.com/r/casjaysdevdocker) ⛵  
