@@ -329,7 +329,7 @@ HOST_DOCKER_NETWORK="bridge"
 HOST_DOCKER_LINK=""
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set listen type - Default all - [all/local/lan/docker/public]
-HOST_NETWORK_ADDR="all"
+HOST_NETWORK_ADDR="lan"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set this to the protocol the the container will use - [http/https/git/ftp/postgres/mysql/mongodb]
 CONTAINER_PROTOCOL="http"
@@ -349,7 +349,7 @@ HOST_NGINX_INTERNAL_HOST=""
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Enable this if container is running a webserver - [yes/no] [internalPort] [yes/no] [yes/no] [listen]
 CONTAINER_WEB_SERVER_ENABLED="yes"
-CONTAINER_WEB_SERVER_INT_PORT="8080"
+CONTAINER_WEB_SERVER_INT_PORT="80"
 CONTAINER_WEB_SERVER_SSL_ENABLED="no"
 CONTAINER_WEB_SERVER_AUTH_ENABLED="no"
 CONTAINER_WEB_SERVER_LISTEN_ON="0.0.0.0"
@@ -1198,8 +1198,8 @@ if [ -n "$CONTAINER_USER_ADMIN_PASS_HASH" ]; then
     CONTAINER_USER_ADMIN_PASS_RAW="$(__password 32)"
     CONTAINER_USER_ADMIN_PASS_HASH="$(__hash_password $CONTAINER_USER_ADMIN_PASS_RAW)"
   fi
-    CONTAINER_USER_ADMIN_PASS_RAW="${CONTAINER_USER_ADMIN_PASS_RAW:-$CONTAINER_USER_ADMIN_PASS_HASH}"
-    CONTAINER_USER_ADMIN_PASS_HASH="${CONTAINER_USER_ADMIN_PASS_HASH:-$(__hash_password $CONTAINER_USER_ADMIN_PASS_RAW)}"
+  CONTAINER_USER_ADMIN_PASS_RAW="${CONTAINER_USER_ADMIN_PASS_RAW:-$CONTAINER_USER_ADMIN_PASS_HASH}"
+  CONTAINER_USER_ADMIN_PASS_HASH="${CONTAINER_USER_ADMIN_PASS_HASH:-$(__hash_password $CONTAINER_USER_ADMIN_PASS_RAW)}"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup display if enabled
