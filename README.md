@@ -19,9 +19,9 @@ dockermgr update ifconfig
 OR
 
 ```shell
-mkdir -p "$HOME/.local/share/srv/docker/ifconfig/rootfs"
+mkdir -p "$HOME/.local/share/srv/docker/ifconfig/volumes"
 git clone "https://github.com/dockermgr/ifconfig" "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig/rootfs/." "$HOME/.local/share/srv/docker/ifconfig/rootfs/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ifconfig/volumes/." "$HOME/.local/share/srv/docker/ifconfig/volumes/"
 ```
 
 ## via command line  
@@ -34,8 +34,8 @@ docker run -d \
 --name casjaysdevdocker-ifconfig \
 --hostname casjaysdev-ifconfig \
 -e TZ=${TIMEZONE:-America/New_York} \
--v $HOME/.local/share/srv/docker/ifconfig/rootfs/data:/data:z \
--v $HOME/.local/share/srv/docker/ifconfig/rootfs/config:/config:z \
+-v $HOME/.local/share/srv/docker/ifconfig/volumes/data:/data:z \
+-v $HOME/.local/share/srv/docker/ifconfig/volumes/config:/config:z \
 -p 80:80 \
 casjaysdevdocker/ifconfig:latest
 ```
@@ -52,8 +52,8 @@ services:
       - TZ=America/New_York
       - HOSTNAME=casjaysdev-ifconfig
     volumes:
-      - $HOME/.local/share/srv/docker/ifconfig/rootfs/data:/data:z
-      - $HOME/.local/share/srv/docker/ifconfig/rootfs/config:/config:z
+      - $HOME/.local/share/srv/docker/ifconfig/volumes/data:/data:z
+      - $HOME/.local/share/srv/docker/ifconfig/volumes/config:/config:z
     ports:
       - 80:80
     restart: always
